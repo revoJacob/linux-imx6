@@ -111,3 +111,5 @@
 		};
 	};
 };
+
+/include/ "maxim-miniq.dtsi"
