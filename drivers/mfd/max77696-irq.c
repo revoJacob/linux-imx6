@@ -567,11 +567,7 @@ __devinit int max77696_topint_init (struct max77696_core *core)
         irq_set_nested_thread(irq, true);
 
 #ifdef CONFIG_ARM
-        /*
-         * ARM needs us to explicitly flag the IRQ as VALID,
-         * once we do so, it will also set the noprobe.
-         */
-        set_irq_flags(irq, IRQF_VALID);
+        irq_modify_status(irq, IRQ_NOREQUEST, IRQ_NOPROBE);
 #else
         irq_set_noprobe(irq);
 #endif
