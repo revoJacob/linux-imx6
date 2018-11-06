@@ -123,6 +123,15 @@
 	status = "okay";
 };
 
+/include/ "max77696.dtsi"
+&i2c1 {
+	clock-frequency = <400000>;
+	pinctrl-names = "default";
+	pinctrl-0 = 	<&pinctrl_i2c1
+			 &pinctrl_pmic>;
+	status = "okay";
+};
+
 &iomuxc {
 	imx6sl-warp {
 		pinctrl_uart1: uart1grp {
@@ -227,6 +236,19 @@
 				MX6SL_PAD_SD3_DAT1__SD3_DATA1		0x4170f9
 				MX6SL_PAD_SD3_DAT2__SD3_DATA2		0x4170f9
 				MX6SL_PAD_SD3_DAT3__SD3_DATA3		0x4170f9
+			>;
+		};
+
+		pinctrl_i2c1: i2c1grp {
+			fsl,pins = <
+				MX6SL_PAD_I2C1_SCL__I2C1_SCL	0x4041b8b1
+				MX6SL_PAD_I2C1_SDA__I2C1_SDA	0x4041b8b1
+			>;
+		};
+
+		pinctrl_pmic: pmicgrp {
+			fsl,pins = <
+				MX6SL_PAD_REF_CLK_32K__GPIO3_IO22 0x41b0b1 /* IRQ */
 			>;
 		};
 	};
