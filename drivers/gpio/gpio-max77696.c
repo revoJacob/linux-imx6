@@ -177,7 +177,7 @@ static struct max77696_gpio_cfg_bitdesc max77696_gpio_cfgs[] = {
 static int max77696_gpio_chip_direction_input (struct gpio_chip *chip,
     unsigned offset)
 {
-    struct max77696_gpios *gpios = dev_get_drvdata(chip->dev);
+    struct max77696_gpios *gpios = dev_get_drvdata(chip->parent);
     int rc;
 
     __lock(gpios);
@@ -190,7 +190,7 @@ static int max77696_gpio_chip_direction_input (struct gpio_chip *chip,
 
 static int max77696_gpio_chip_get (struct gpio_chip *chip, unsigned offset)
 {
-    struct max77696_gpios *gpios = dev_get_drvdata(chip->dev);
+    struct max77696_gpios *gpios = dev_get_drvdata(chip->parent);
     u16 din = 0;
     int rc;
 
@@ -206,7 +206,7 @@ static int max77696_gpio_chip_get (struct gpio_chip *chip, unsigned offset)
 static int max77696_gpio_chip_direction_output (struct gpio_chip *chip,
     unsigned offset, int value)
 {
-    struct max77696_gpios *gpios = dev_get_drvdata(chip->dev);
+    struct max77696_gpios *gpios = dev_get_drvdata(chip->parent);
     int rc;
 
     __lock(gpios);
@@ -220,7 +220,7 @@ static int max77696_gpio_chip_direction_output (struct gpio_chip *chip,
 static void max77696_chip_gpio_set (struct gpio_chip *chip,
     unsigned offset, int value)
 {
-    struct max77696_gpios *gpios = dev_get_drvdata(chip->dev);
+    struct max77696_gpios *gpios = dev_get_drvdata(chip->parent);
 
     __lock(gpios);
 
@@ -231,7 +231,7 @@ static void max77696_chip_gpio_set (struct gpio_chip *chip,
 
 static int max77696_gpio_chip_to_irq (struct gpio_chip *chip, unsigned offset)
 {
-    struct max77696_gpios *gpios = dev_get_drvdata(chip->dev);
+    struct max77696_gpios *gpios = dev_get_drvdata(chip->parent);
 
     return (int)(gpios->irq_base + offset);
 }
@@ -239,7 +239,7 @@ static int max77696_gpio_chip_to_irq (struct gpio_chip *chip, unsigned offset)
 static void max77696_gpio_chip_dbg_show (struct seq_file *s,
     struct gpio_chip *chip)
 {
-    struct max77696_gpios *gpios = dev_get_drvdata(chip->dev);
+    struct max77696_gpios *gpios = dev_get_drvdata(chip->parent);
     const char *label;
     u16 dir = 0, lvl = 0;
     int i;
@@ -755,7 +755,7 @@ static __devinit int max77696_gpio_probe (struct platform_device *pdev)
 
     gpios->gpio_chip->base  = gpios->pdata->gpio_base;
     gpios->gpio_chip->ngpio = GPIO_NGPIO;
-    gpios->gpio_chip->dev   = dev;
+    gpios->gpio_chip->parent   = dev;
 
     rc = gpiochip_add(gpios->gpio_chip);
     if (unlikely(rc < 0)) {
