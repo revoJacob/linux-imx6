@@ -51,7 +51,7 @@
 
 #define BUCK_ENABLE_DELAY            250 /* us */
 #define BUCK_FSR_TIME                1   /* us */
-#define BUCK_DEFAULT_MODE            REGULATOR_MODE_FAST
+#define BUCK_DEFAULT_MODE            REGULATOR_MODE_IDLE
 
 #define VOUT1                        0x31
 #define VOUT1DVS                     0x32
