@@ -17,8 +17,8 @@
  * MAX77696 PMIC Linux Driver. If not, see http://www.gnu.org/licenses/.
  */
 
-/*#include <dt-bindings/gpio/gpio.h>*/
-/*#include <dt-bindings/interrupt-controller/arm-gic.h>*/
+//#include <dt-bindings/gpio/gpio.h>
+//#include <dt-bindings/interrupt-controller/arm-gic.h>
 
 / {
 	max77696 {
@@ -27,6 +27,7 @@
 		#address-cells = <0>;
 		#size-cells = <0>;
 
+		pinctrl-0 = <&pinctrl_pmic>;
 		intb_gpio = <&gpio3 22 0>;
 		i2c_busnum = <0>; /* comment out for non-static i2c-adapter */
 
@@ -49,7 +50,7 @@
 
 		max77696_gpio {
 			compatible = "maxim,max77696-gpio";
-			status = "okay";
+			status = "disabled";
 			gpio-controller;
 			#gpio-cells = <2>;
 			interrupt-controller;
@@ -113,7 +114,8 @@
 				drive = <MAX77696_GPIO_DRIVE>;
 				level = <MAX77696_GPIO_LEVEL>;
 			};
-			***/
+**/
+
 		};
 
 /*******************************************************************************
@@ -175,32 +177,30 @@
 				regulator-min-microvolt = <600000>;
 				regulator-max-microvolt = <3387500>;
 				regulator-always-on;
+				regulator-boot-on;
 				rsr = <1>; /* MAX77696_BUCK_RSR_25000 */
 				fsr_en;
-				dvs_uV = <1000000>; /* 1.000V (default) */
 			};
 
-			buck2@1 {
-				reg = <1>;
-				regulator-name = "MAX77696-BUCK2";
-				regulator-min-microvolt = <600000>;
-				regulator-max-microvolt = <3387500>;
-				regulator-always-on;
-				rsr = <1>; /* MAX77696_BUCK_RSR_25000 */
-				fsr_en;
-				dvs_uV = <1000000>; /* 1.000V (default) */
-			};
+//			buck2@1 {
+//				reg = <1>;
+//				regulator-name = "MAX77696-BUCK2";
+//				regulator-min-microvolt = <600000>;
+//				regulator-max-microvolt = <3387500>;
+//				regulator-always-on;
+//				rsr = <3>; /* MAX77696_BUCK_RSR_25000 */
+//				fsr_en;
+//			};
 
-			buck3@2 {
-				reg = <2>;
-				regulator-name = "MAX77696-BUCK3";
-				regulator-min-microvolt = <600000>;
-				regulator-max-microvolt = <3387500>;
-				regulator-always-on;
-				rsr = <1>; /* MAX77696_BUCK_RSR_25000 */
-				fsr_en;
-				dvs_uV = <0>; /* not supported */
-			};
+//			buck3@2 {
+//				reg = <2>;
+//				regulator-name = "MAX77696-BUCK3";
+//				regulator-min-microvolt = <600000>;
+//				regulator-max-microvolt = <3387500>;
+//				regulator-always-on;
+//				rsr = <1>; /* MAX77696_BUCK_RSR_25000 */
+//				fsr_en;
+//			};
 
 			buck4@3 {
 				reg = <3>;
@@ -210,7 +210,6 @@
 				regulator-always-on;
 				rsr = <1>; /* MAX77696_BUCK_RSR_25000 */
 				fsr_en;
-				dvs_uV = <0>; /* not supported */
 			};
 
 			buck5@4 {
@@ -221,10 +220,9 @@
 				regulator-always-on;
 				rsr = <1>; /* MAX77696_BUCK_RSR_25000 */
 				fsr_en;
-				dvs_uV = <0>; /* not supported */
 			};
 
-			buck6@5 {
+			V2P9: buck6@5 {
 				reg = <5>;
 				regulator-name = "MAX77696-BUCK6";
 				regulator-min-microvolt = <600000>;
@@ -232,7 +230,6 @@
 				regulator-always-on;
 				rsr = <1>; /* MAX77696_BUCK_RSR_25000 */
 				fsr_en;
-				dvs_uV = <0>; /* not supported */
 			};
 		};
 
@@ -242,7 +239,7 @@
 
 		max77696_ldo {
 			compatible = "maxim,max77696-ldos";
-			status = "okay";
+			status = "disabled";
 
 			#address-cells = <1>;
 			#size-cells = <0>;
@@ -344,7 +341,7 @@
 
 		max77696_lsw {
 			compatible = "maxim,max77696-lsws";
-			status = "okay";
+			status = "disabled";
 
 			#address-cells = <1>;
 			#size-cells = <0>;
@@ -398,48 +395,54 @@
 			 * MAX77696_VREG_EPD_VDDH 5
 			 */
 
-			/*disp_reg:*/ epd0@0 {
+			disp_reg: epd0@0 {
 				reg = <0>;
-				regulator-name = "MAX77696-DISP";
+				regulator-name = "DISPLAY";
+				regulator-boot-on;
 			};
 
-			/*vcom_reg:*/ epd1@1 {
+			vcom_reg: epd1@1 {
 				reg = <1>;
-				regulator-name = "MAX77696-VCOM";
+				regulator-name = "VCOM";
 				regulator-min-microvolt = <44941100>; /* 50000000 + -5058900 */
 				regulator-max-microvolt = <50000000>; /* 50000000 +        0 */
+				regulator-boot-on;	
 			};
 
-			/*vee_reg:*/ epd2@2 {
+			vee_reg: epd2@2 {
 				reg = <2>;
 				regulator-name = "MAX77696-VEE";
 				regulator-min-microvolt = <21980000>; /* 50000000 + -28020000 */
 				regulator-max-microvolt = <35000000>; /* 50000000 + -15000000 */
-				regulator-always-on;
+//				regulator-always-on;
+				regulator-boot-on;	
 			};
 
-			/*vneg_reg:*/ epd3@3 {
+			vneg_reg: epd3@3 {
 				reg = <3>;
 				regulator-name = "MAX77696-VNEG";
 				regulator-min-microvolt = <48380000>; /* 50000000 +  -1620000 */
 				regulator-max-microvolt = <51605750>; /* 50000000 +   1605750 */
-				regulator-always-on;
+//				regulator-always-on;
+				regulator-boot-on;
 			};
 
-			/*vpos_reg:*/ epd4@4 {
+			vpos_reg: epd4@4 {
 				reg = <4>;
 				regulator-name = "MAX77696-VPOS";
 				regulator-min-microvolt = <58000000>; /* 50000000 +  8000000 */
 				regulator-max-microvolt = <68000000>; /* 50000000 + 18000000 */
-				regulator-always-on;
+//				regulator-always-on;
+				regulator-boot-on;
 			};
 
-			/*vddh_reg:*/ epd5@5 {
+			vddh_reg: epd5@5 {
 				reg = <5>;
 				regulator-name = "MAX77696-VDDH";
 				regulator-min-microvolt = <65000000>; /* 50000000 + 15000000 */
 				regulator-max-microvolt = <79500000>; /* 50000000 + 29500000 */
-				regulator-always-on;
+//				regulator-always-on;
+				regulator-boot-on;
 			};
 		};
 
@@ -475,7 +478,7 @@
 
 		max77696_eh {
 			compatible = "maxim,max77696-eh";
-			status = "okay";
+			status = "disabled";
 			psy_name = "max77696-eh";
 			supplied_to = "max77696-battery";
 
@@ -494,7 +497,7 @@
 
 		max77696_leds {
 			compatible = "maxim,max77696-leds";
-			status = "okay";
+			status = "disabled";
 
 			#address-cells = <1>;
 			#size-cells = <0>;
@@ -504,7 +507,7 @@
 				reg = <0>;
 				linux,default-trigger = "none";
 				manual;
-				brightness = <255>; /* LED_FULL */
+				brightness = <0>; /* LED_FULL */
 				delay_on = <640>;
 				delay_off = <0>;
 			};
@@ -513,10 +516,10 @@
 				label = "amber";
 				reg = <1>;
 				linux,default-trigger = "none";
-				/*manual;*/
-				/*brightness = <>;*/
-				/*delay_on = <>;*/
-				/*delay_off = <>;*/
+				manual;
+				brightness = <0>;
+				delay_on = <640>;
+				delay_off = <0>;
 			};
 		};
 
@@ -526,7 +529,7 @@
 
 		max77696_bl {
 			compatible = "maxim,max77696-bl";
-			status = "okay";
+			status = "disabled";
 
 			boot_brightness = <0xFFF>; /* full brightness */
 		};
@@ -537,7 +540,7 @@
 
 		max77696_rtc {
 			compatible = "maxim,max77696-rtc";
-			status = "okay";
+			status = "disabled";
 
 			smpl_msec = <500>;
 		};
